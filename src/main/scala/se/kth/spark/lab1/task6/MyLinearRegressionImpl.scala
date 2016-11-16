@@ -42,7 +42,8 @@ class MyLinearRegressionImpl(override val uid: String)
   }
 
   def gradient(d: RDD[Instance], weights: Vector): Vector = {
-  ???
+   val rdd_summands_vectors =  d.map(x => gradientSummand(weights, x))
+   rdd_summands_vectors.reduce((a, b) =>  VectorHelper.sum(a,b ))
   }
 
   def linregGradientDescent(trainData: RDD[Instance], numIters: Int): (Vector, Array[Double]) = {
