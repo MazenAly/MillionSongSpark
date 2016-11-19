@@ -28,7 +28,8 @@ object Main {
     val regexTokenizer = new RegexTokenizer()
       .setInputCol("raw")
       .setOutputCol("tokens")
-      .setPattern(",")
+      .setPattern("[\\d\\.-]+")
+      .setGaps(false)
 
     //Step2: transform with tokenizer and show 5 rows
     val regexTokenized = regexTokenizer.transform(rawDF)
@@ -64,7 +65,7 @@ object Main {
     println(min_label)
 
     //Step6: shift all labels by the value of minimum label such that the value of the smallest becomes 0 (use our DoubleUDF) 
-    val lShifter = new DoubleUDF(x => (x-min_label))
+    val lShifter = new DoubleUDF(x => (x-1922.0))
     .setInputCol("label_d")
     .setOutputCol("label_shifted")
     
@@ -93,7 +94,7 @@ object Main {
   
 
     //Step11: drop all columns from the dataframe other than label and features
-    val final_df = tansformed.select( "label_shifted", "three_features").collect().foreach(println)
+    val final_df = tansformed.select( "label_shifted", "three_features").take(5).foreach(println)
 
   }
 }
